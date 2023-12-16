@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            top: 100px;
+            left: center;
+            margin: auto;
+            width: 88%;
+            height: 88%;
+            border-radius: 10px;
+            background-color: #000000;
+            text-align: center;
+            overflow-x: hidden;
+            /* display: flex ; */
+
+
+        }
+
+        .close {
+            font-weight: 700;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: aliceblue;
+        }
+
+        .popup-content {
+            position: relative;
+            background-color: rgb(23, 129, 76);
+            color: aliceblue;
+            width: 100%;
+            height: auto;
+            /* max-width: 450px; */
+            margin: auto;
+            /* padding: 30px; */
+            border-radius: 5px;
+            /* overflow: scroll; */
+            text-align: center;
+
+        }
+    </style>
+</head>
+
+<body
+    style="  background: linear-gradient(to right, #8a9c92, #536976); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- navbar -->
+            <nav class="navbar navbar-expand bg-body-tertiary p-4"
+                style="background-image: linear-gradient(135deg, #2f3657 0%, #100f11 100%);">
+                <div class="container-fluid d-flex justify-content-center ">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active fs-4 " style="color: rgb(124, 124, 124);" aria-current="page"
+                                href="http://127.0.0.1:5500/firstTrial.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active fs-4 " aria-current="page" style="color: rgb(243, 243, 243);"
+                                href="http://127.0.0.1:5500/seconfpageTrial.html">Tableformat</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                            id="searchField" oninput="searchFunction() ">
+                        <!-- <button class="btn btn-outline-success" onclick="" type="button">Search</button> -->
+                    </form>
+
+                </div>
+            </nav>
+        </div>
+
+        <!-- table -->
+        <div class="container ">
+            <div id="TableContent" class="shadow p-0 mt-5 bg-body-tertiary rounded "></div>
+        </div>
+
+
+        <!-- ---popup------- -->
+        <div class="container d-flex justify-content-center shadow p-0  bg-body-tertiary rounded ">
+            <div id="popup" class="popup  " style="border: px solid red;">
+                <div class="popup-content  ">
+                    <span class="close" onclick="closePopup()">&times;</span>
+                    <div id="popup-content" class=" "></div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script>
+
+        tableTop();
+        // main table
+        function tableTop() {
+            let personalData = localStorage.getItem("Array");
+            let objectsArray = JSON.parse(personalData);
+
+            var tableHTML =
+                `<table class="table table-striped-dark table-hover  shadow   bg-body-tertiary rounded " id="mytable" style="background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);" >`;
+            tableHTML += `<thead class=table-dark>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">FirstName</th>
+                            <th scope="col">LastName</th>
+                            <th scope="col">City</th>
+                            <th scope="col">Action</th>
+                            </tr>
+                                </thead>`;
+            objectsArray.forEach((retrievedObject, index) => {
+
+                tableHTML += `<tr>
+                                <td>${index}</td>
+                                <td>${retrievedObject.firstName}</td>
+                                <td>${retrievedObject.lastName}</td>
+                                <td>${retrievedObject.city}</td>
+                                <td>  <button type="button" class="btn bg-dark btn-sm" style="color: aliceblue;"  onclick="viewData1(${index}) ">View</button>  <button type="button" class="btn bg-danger btn-sm" style="color: aliceblue;"  onclick="" >Remove</button></td>
+                                
+                              </tr>`;
+            });
+            tableHTML += "</table>";
+            document.getElementById("TableContent").innerHTML = tableHTML;
+        }
+
+
+        // --------clsoePopup---------//
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none';
+            const popupContentDiv = document.getElementById('popup-content');
+            popupContentDiv.innerHTML = '';
+        }
+
+
+        // -----viewData---
+        function viewData1(m) {
+            // var e = m.parentNode.parentNode.rowIndex;
+            var i = m;
+
+            let lPersonalData = localStorage.getItem('Array');
+            let lAccountData = localStorage.getItem("accountData");
+            let lFamilyData = localStorage.getItem('familyData');
+            let lEmploymentData = localStorage.getItem("EmploymentData");
+            let lAssetData = localStorage.getItem('asset');
+
+            let pData = JSON.parse(lPersonalData);
+            let acData = JSON.parse(lAccountData);
+            let fData = JSON.parse(lFamilyData);
+            let eData = JSON.parse(lEmploymentData);
+            let asData = JSON.parse(lAssetData);
+
+            const popup = document.getElementById("popup");
+            const popupContentDiv = document.getElementById("popup-content");
+            popupContentDiv.innerHTML = `<table class="table table-hover table-responsive  ">
+                
+        <tr><h3>${pData[i].firstName}'s details </h3></tr>
+        <tr><td>FirstName</td><td>${pData[i].firstName}</td></tr>
+        <tr><td>LastName</td><td>${pData[i].lastName}</td></tr>
+        <tr><td>Age</td><td>${pData[i].age}</td></tr>
+        <tr><td>City</td><td>${pData[i].city}</td></tr>
+        <tr><td>State</td><td>${pData[i].state}</td></tr>
+        <tr><td>Pincode</td><td>${pData[i].pinCode}</td></tr>
+        <tr><td>Degree-Precentage</td><td>${pData[i].degreePercentage}</td></tr>
+  
+        <tr><td>bankName</td><td>${acData[i].bankName}</td></tr>
+        <tr><td>accountNumber</td><td>${acData[i].accountNumber}</td></tr>
+        <tr><td> ifscCode</td><td>${acData[i].ifscCode}</td></tr>
+        <tr><td>aadharCardNumber</td><td>${acData[i].aadharCardNumber}</td></tr>
+        <tr><td>PanNumber</td><td>${acData[i].panNumber}</td></tr>
+        <tr><td>Mobile Number</td><td>${acData[i].mobileNumber}</td></tr>
+        <tr><td>Mail-ID</td><td>${acData[i].emailId}</td></tr>
+
+        <tr><td>fatherName</td><td>${fData[i].fatherName}</td></tr>
+        <tr><td> motherName</td><td>${fData[i].motherName}</td></tr>
+        <tr><td> maritalStatus</td><td>${fData[i].maritalStatus}</td></tr>
+        <tr><td>familyMembers</td><td>${fData[i].familyMembers}</td></tr>
+        <tr><td>permanentAddress</td><td>${fData[i].permanentAddress}</td></tr>
+
+                <tr><td> Bio</td><td>${asData[i].bio}</td></tr>
+                <tr><td>Skills</td><td>${asData[i].skills}</td></tr>
+    </table>` ;
+            popup.style.display = 'block';
+            alert(`page loading`);
+        }
+
+
+
+
+        // --------search fucntion-----
+
+        function searchFunction() {
+
+            var inputValue = document.getElementById("searchField").value;
+            var storedData = localStorage.getItem("Array");
+            var personalData = JSON.parse(storedData);
+
+            var tableHTML = `<table class="table table-striped-dark table-hover  shadow   bg-body-tertiary rounded " id="mytable" style="background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);" >
+                        <thead class=table-dark>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">FirstName</th>
+                            <th scope="col">LastName</th>
+                            <th scope="col">City</th>
+                            <th scope="col">Action</th>
+                            </tr>
+                        </thead>` ;
+
+            var tableBody = "";
+
+            for (let index = 0; index < personalData.length; index++) {
+
+                let firstName = personalData[index].firstName;
+                let regex = new RegExp(inputValue, "gi");
+                
+                if (regex.test(firstName)) {
+                    console.log(firstName);
+                    // console.log(index);
+                    tableBody += `
+                      <tr>
+                        <td>${index}</td>
+                                <td>${personalData[index].firstName}</td>
+                                <td>${personalData[index].lastName}</td>
+                                <td>${personalData[index].city}</td>
+                                <td>  <button type="button" class="btn bg-dark btn-sm " style="color: aliceblue;"  onclick="viewData1(${index}) " >View</button>  <button type="button" class="btn bg-danger btn-sm" style="color: aliceblue;"  onclick="" >Remove</button></td>
+                              </tr>`;
+                }
+            }
+            var table = tableHTML + tableBody + "</table>";
+            document.getElementById("TableContent").innerHTML = table;
+        }
+
+
+
+        // -------remove function-------
+
+        function removeData() {
+
+        }   
+    </script>
+
+
+
+
+
+
+
+    <!-- script -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
